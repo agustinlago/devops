@@ -16,7 +16,7 @@ items:
       kind: Route
     project: qa-alago
     source:
-      path: manifests/alago/overlays/qa
+      path: manifests/alago/test/overlays/qa
       repoURL: https://github.com/agustinlago/devops.git
       targetRevision: main
     syncPolicy:

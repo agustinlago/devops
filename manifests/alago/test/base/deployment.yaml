@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: test
-        image: [PATCH_ME]
+        image: <PATCH_ME>
         ports:
           - containerPort: 5005
             protocol: TCP

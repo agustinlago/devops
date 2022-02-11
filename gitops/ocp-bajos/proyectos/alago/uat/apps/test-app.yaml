@@ -16,9 +16,9 @@ items:
       kind: Route
     project: uat-alago
     source:
-      path: overlays/uat
-      repoURL: ssh://git@10.10.103.100/DevOps/manifests/alago/test.git
-      targetRevision: master
+      path: manifests/alago/overlays/uat
+      repoURL: https://github.com/agustinlago/devops.git
+      targetRevision: main
     syncPolicy:
       automated:
         selfHeal: true

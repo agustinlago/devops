@@ -31,5 +31,5 @@ objects:
     source:
       path: overlays/prod
       repoURL: 'ssh://git@10.10.103.100/DevOps/manifests/${BASE_PROJECT}/${APP_NAME}.git'
-      targetRevision: master
+      targetRevision: main
     syncPolicy: {}

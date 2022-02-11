@@ -10,6 +10,6 @@ items:
     insecure: "true"
     name: test
     type: git
-    url: ssh://git@10.10.103.100/devops/manifests/alago/test.git
+    url: https://github.com/agustinlago/test.git
 kind: List
 metadata: {}

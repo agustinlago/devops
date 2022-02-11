@@ -7,11 +7,11 @@ Los nombres de **grupos**/**repositorios**/**aplicaciones** deben estar todos en
 
 1. ssh://git@10.10.103.100/[BASE_PROJECT]/[APP_NAME].git
 
-#### Compuesto de dos branchs, master y develop
+#### Compuesto de dos branchs, main y develop
 
 Branch: **develop** -> **pipeline ci**, construye la imagen para el proyecto **dev** en ocp
 
-Branch: **master** -> **pipeline cd**, construye la imagen para los proyectos **qa**, **uat** y **prod** en ocp
+Branch: **main** -> **pipeline cd**, construye la imagen para los proyectos **qa**, **uat** y **prod** en ocp
 
 - **Estructura manifest:**
 

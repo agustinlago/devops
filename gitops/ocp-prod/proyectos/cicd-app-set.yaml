@@ -29,7 +29,7 @@ spec:
       source:
         path: 'ocp-prod/{{recurso}}'
         repoURL: 'ssh://git@10.10.103.100/devops/cicd.git'
-        targetRevision: master
+        targetRevision: main
       project: openshift-gitops
       syncPolicy:
         automated:

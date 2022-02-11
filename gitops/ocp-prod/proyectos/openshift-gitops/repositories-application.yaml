@@ -10,7 +10,7 @@ spec:
   source:
     path: repositories
     repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
-    targetRevision: master
+    targetRevision: main
     directory:
       recurse: true
   project: openshift-gitops

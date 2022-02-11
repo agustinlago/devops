@@ -18,7 +18,7 @@ items:
     source:
       path: overlays/prod
       repoURL: ssh://git@10.10.103.100/DevOps/manifests/alago/test.git
-      targetRevision: master
+      targetRevision: main
     syncPolicy: {}
 kind: List
 metadata: {}

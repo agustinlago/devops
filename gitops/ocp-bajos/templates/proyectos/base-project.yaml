@@ -112,7 +112,7 @@ objects:
         source:
           path: 'ocp-bajos/proyectos/{{project}}/{{env}}'
           repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
-          targetRevision: master
+          targetRevision: main
           directory:
             recurse: true
         project: '{{project}}'

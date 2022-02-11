@@ -31,7 +31,7 @@ objects:
     source:
       path: overlays/qa
       repoURL: 'ssh://git@10.10.103.100/DevOps/manifests/${BASE_PROJECT}/${APP_NAME}.git'
-      targetRevision: master
+      targetRevision: main
     syncPolicy:
       automated:
         selfHeal: true

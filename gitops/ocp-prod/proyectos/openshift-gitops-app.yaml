@@ -12,7 +12,7 @@ spec:
   source:
     path: 'ocp-prod/proyectos/openshift-gitops'
     repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
-    targetRevision: master
+    targetRevision: main
   project: 'openshift-gitops'
   syncPolicy:
     automated:

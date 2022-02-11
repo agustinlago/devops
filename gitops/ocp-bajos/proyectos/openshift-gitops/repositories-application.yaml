@@ -8,9 +8,9 @@ spec:
     namespace: 'openshift-gitops'
     server: 'https://kubernetes.default.svc'
   source:
-    path: repositories
-    repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
-    targetRevision: master
+    path: gitops/repositories
+    repoURL: 'https://github.com/agustinlago/devops.git'
+    targetRevision: main
     directory:
       recurse: true
   project: openshift-gitops

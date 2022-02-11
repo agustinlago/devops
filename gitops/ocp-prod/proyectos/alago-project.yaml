@@ -64,7 +64,7 @@ items:
             recurse: true
           path: ocp-prod/proyectos/{{project}}/{{env}}
           repoURL: ssh://git@10.10.103.100/devops/gitops.git
-          targetRevision: master
+          targetRevision: main
         syncPolicy:
           automated:
             selfHeal: true

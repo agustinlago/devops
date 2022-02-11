@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  template:
+    spec:
+      containers:
+      - name: test
+        image: image-registry.openshift-image-registry.svc:5000/prod-alago/test:2022-01-17-18-36-47
+ 

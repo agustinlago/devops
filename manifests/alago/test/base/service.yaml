@@ -3,16 +3,13 @@ kind: Service
 metadata:
   labels:
     app: test
-    app.kubernetes.io/component: test
-    app.kubernetes.io/instance: test
   name: test
 spec:
   ports:
-  - name: 8080-tcp
-    port: 8080
-  - name: 8443-tcp
-    port: 8443
-  - name: 8778-tcp
-    port: 8778
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 5005
   selector:
-    deployment: test
+    app: test
+  type: ClusterIP

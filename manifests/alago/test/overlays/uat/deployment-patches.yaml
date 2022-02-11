@@ -7,5 +7,5 @@ spec:
     spec:
       containers:
       - name: test
-        image: image-registry.openshift-image-registry.svc:5000/uat-alago/test:2022-01-17-18-36-47
+        image: pcrete/gitops-argocd-demo:master-e66424e2
  

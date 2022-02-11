@@ -1,0 +1,25 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: repository-template
+  namespace: openshift
+  annotations:
+    description: Template para crear el repository
+parameters:
+  - name: BASE_PROJECT
+    required: true
+  - name: APP_NAME
+    required: true
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: repository-${APP_NAME}
+    namespace: openshift-gitops
+    labels:
+      argocd.argoproj.io/secret-type: repository
+  stringData:
+    name: ${APP_NAME}
+    url: ssh://git@10.10.103.100/devops/manifests/${BASE_PROJECT}/${APP_NAME}.git
+    type: git
+    insecure: 'true'

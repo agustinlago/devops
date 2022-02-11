@@ -1,0 +1,106 @@
+apiVersion: v1
+items:
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    name: alago
+  spec:
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: AppProject
+    - group: argoproj.io
+      kind: ApplicationSet
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+    destinations:
+    - namespace: openshift-gitops
+      server: https://kubernetes.default.svc
+    - namespace: prod-alago
+      server: https://kubernetes.default.svc
+    namespaceResourceBlacklist:
+    - group: ""
+      kind: ResourceQuota
+    - group: ""
+      kind: LimitRange
+    - group: ""
+      kind: NetworkPolicy
+    sourceRepos:
+    - '*'
+- apiVersion: argoproj.io/v1alpha1
+  kind: ApplicationSet
+  metadata:
+    name: alago-set
+  spec:
+    generators:
+    - list:
+        elements:
+        - env: prod
+          project: alago
+    template:
+      metadata:
+        finalizers:
+        - resources-finalizer.argocd.argoproj.io
+        name: '{{env}}-{{project}}'
+        namespace: openshift-gitops
+      spec:
+        destination:
+          namespace: '{{env}}-{{project}}'
+          server: https://kubernetes.default.svc
+        project: '{{project}}'
+        source:
+          directory:
+            recurse: true
+          path: ocp-prod/proyectos/{{project}}/{{env}}
+          repoURL: ssh://git@10.10.103.100/devops/gitops.git
+          targetRevision: master
+        syncPolicy:
+          automated:
+            selfHeal: true
+          syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    name: prod-alago
+  spec:
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+    destinations:
+    - namespace: prod-alago
+      server: https://kubernetes.default.svc
+    namespaceResourceBlacklist:
+    - group: ""
+      kind: ResourceQuota
+    - group: ""
+      kind: LimitRange
+    - group: ""
+      kind: NetworkPolicy
+    sourceRepos:
+    - '*'
+kind: List
+metadata: {}

@@ -1,0 +1,76 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: uat-project-template
+  namespace: openshift
+  annotations:
+    description: Template para crear proyectos de UAT
+parameters:
+  - name: BASE_PROJECT
+    required: true
+  - name: NAMESPACE
+    value: openshift-gitops
+objects:
+########################   NAMESPACE   ##############################
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: uat-${BASE_PROJECT}
+########################   PROJECT     ###############################
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    name: uat-${BASE_PROJECT}
+    namespace: ${NAMESPACE}
+    # Finalizer that ensures that project is not deleted until it is not referenced by any application
+    finalizers:
+      - resources-finalizer.argocd.argoproj.io
+  spec:
+    
+    # Allow manifests to deploy from any Git repos
+    sourceRepos:
+    - '*'
+
+    # Only permit applications to deploy to the guestbook namespace in the same cluster
+    destinations:
+      - namespace: uat-${BASE_PROJECT}
+        server: https://kubernetes.default.svc
+    
+    # Deny all cluster-scoped resources from being created, except for Namespace
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+
+    # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
+    namespaceResourceBlacklist:
+    - group: ''
+      kind: ResourceQuota
+    - group: ''
+      kind: LimitRange
+    - group: ''
+      kind: NetworkPolicy
+    
+    # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
+    # namespaceResourceWhitelist:
+    # - group: 'apps'
+    #   kind: Deployment
+    # - group: 'apps'
+    #   kind: DeploymentConfig
+    # - group: 'apps'
+    #   kind: StatefulSet
+    roles:
+    # A role which provides read-only access to all applications in the project
+    # - name: read-only
+    #   description: Read-only privileges to my-project
+    #   policies:
+    #   - p, proj:my-project:read-only, applications, get, my-project/*, allow
+    #   groups:
+    #   - my-oidc-group

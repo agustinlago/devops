@@ -1,0 +1,85 @@
+apiVersion: v1
+items:
+- apiVersion: tekton.dev/v1beta1
+  kind: Pipeline
+  metadata:
+    name: test-manifest-cd-pipeline
+  spec:
+    params:
+    - default: test
+      description: The application deployment name
+      name: APP_NAME
+      type: string
+    - default: ssh://git@10.10.103.100/DevOps/manifests/alago/test.git
+      description: The kustomize git repository url
+      name: KUSTOMIZE_GIT_URL
+      type: string
+    - default: master
+      description: The kustomize git repository revision
+      name: KUSTOMIZE_GIT_REVISION
+      type: string
+    - default: /
+      description: The subdirectory in the kustomize git repository
+      name: KUSTOMIZE_GIT_CONTEXT_DIR
+      type: string
+    - default: overlays/prod/deployment-patches.yaml
+      description: The YAML file in which to patch the image
+      name: KUSTOMIZE_GIT_FILE_NAME
+      type: string
+    - default: alago
+      description: Namespace where the buildconfig is located
+      name: BASE_PROJECT
+      type: string
+    tasks:
+    - name: git-clone
+      params:
+      - name: url
+        value: $(params.KUSTOMIZE_GIT_URL)
+      - name: revision
+        value: $(params.KUSTOMIZE_GIT_REVISION)
+      - name: subdirectory
+        value: $(params.KUSTOMIZE_GIT_CONTEXT_DIR)
+      - name: deleteExisting
+        value: "true"
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: app-source
+    - name: get-image-tag
+      params:
+      - name: fileName
+        value: $(params.KUSTOMIZE_GIT_FILE_NAME)
+      runAfter:
+      - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: get-image-tag-custom
+      workspaces:
+      - name: output
+        workspace: app-source
+    - name: copy
+      params:
+      - name: srcImageURL
+        value: docker://10.10.103.100:8123/salud/$(params.BASE_PROJECT)/$(params.APP_NAME):$(tasks.get-image-tag.results.image-tag)
+      - name: destImageURL
+        value: docker://image-registry.openshift-image-registry.svc:5000/prod-$(params.BASE_PROJECT)/$(params.APP_NAME):$(tasks.get-image-tag.results.image-tag)
+      - name: srcTLSverify
+        value: "false"
+      - name: destTLSverify
+        value: "false"
+      retries: 5
+      runAfter:
+      - get-image-tag
+      taskRef:
+        kind: ClusterTask
+        name: skopeo-copy
+      workspaces:
+      - name: images-url
+        workspace: images-url
+    workspaces:
+    - name: app-source
+    - name: images-url
+kind: List
+metadata: {}

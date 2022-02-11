@@ -1,0 +1,15 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      argocd.argoproj.io/secret-type: repository
+    name: repository-test
+  stringData:
+    insecure: "true"
+    name: test
+    type: git
+    url: ssh://git@10.10.103.100/devops/manifests/alago/test.git
+kind: List
+metadata: {}

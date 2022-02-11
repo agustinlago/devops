@@ -1,0 +1,36 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: uat-app-template
+  namespace: openshift
+  annotations:
+    description: Template para crear apps de UAT
+parameters:
+  - name: APP_NAME
+    required: true
+  - name: BASE_PROJECT
+    required: true
+  - name: NAMESPACE
+    value: openshift-gitops
+objects:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: uat-${APP_NAME}-app
+    namespace: ${NAMESPACE}
+  spec:
+    destination:
+      namespace: uat-${BASE_PROJECT}
+      server: 'https://kubernetes.default.svc'
+    ignoreDifferences: {}
+    project: uat-${BASE_PROJECT}
+    source:
+      path: overlays/uat
+      repoURL: 'ssh://git@10.10.103.100/DevOps/manifests/${BASE_PROJECT}/${APP_NAME}.git'
+      targetRevision: master
+    syncPolicy:
+      automated:
+        selfHeal: true
+      syncOptions:
+        - Validate=false
+        - ApplyOutOfSyncOnly=true

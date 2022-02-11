@@ -1,0 +1,15 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: prod-project-template
+  namespace: openshift
+  annotations:
+    description: Template para crear proyectos de produccion
+parameters:
+  - name: BASE_PROJECT
+    required: true
+objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: prod-${BASE_PROJECT}

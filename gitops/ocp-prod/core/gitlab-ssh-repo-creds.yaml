@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitlab-ssh-repo-creds
+  namespace: openshift-gitops
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: repo-creds
+data:
+  sshPrivateKey: >-
+    ${CERTIFICADO}
+  url: ${URL}
+type: Opaque

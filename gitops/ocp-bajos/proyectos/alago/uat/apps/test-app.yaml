@@ -1,0 +1,29 @@
+apiVersion: v1
+items:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: uat-test-app
+    namespace: openshift-gitops
+  spec:
+    destination:
+      namespace: uat-alago
+      server: https://kubernetes.default.svc
+    ignoreDifferences:
+    - group: '*'
+      jsonPointers:
+      - /spec/tls
+      kind: Route
+    project: uat-alago
+    source:
+      path: overlays/uat
+      repoURL: ssh://git@10.10.103.100/DevOps/manifests/alago/test.git
+      targetRevision: master
+    syncPolicy:
+      automated:
+        selfHeal: true
+      syncOptions:
+      - Validate=false
+      - ApplyOutOfSyncOnly=true
+kind: List
+metadata: {}

@@ -1,0 +1,28 @@
+apiVersion: v1
+items:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: dev-test-app
+    namespace: openshift-gitops
+  spec:
+    destination:
+      namespace: dev-alago
+      server: https://kubernetes.default.svc
+    ignoreDifferences:
+    - group: apps
+      jsonPointers:
+      - /spec/template/spec/containers/0/image
+      kind: Deployment
+    - group: '*'
+      jsonPointers:
+      - /spec/tls
+      kind: Route
+    project: dev-alago
+    source:
+      path: overlays/dev
+      repoURL: ssh://git@10.10.103.100/DevOps/manifests/alago/test.git
+      targetRevision: master
+    syncPolicy: {}
+kind: List
+metadata: {}

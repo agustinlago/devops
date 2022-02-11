@@ -1,0 +1,24 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: rolebinding-template
+  namespace: openshift
+  annotations:
+    description: Template para crear el RoleBinding
+parameters:
+  - name: BASE_PROJECT
+    required: true
+objects:
+- kind: RoleBinding
+  apiVersion: rbac.authorization.k8s.io/v1
+  metadata:
+    name: msal-desarrollo-admin-dev-${BASE_PROJECT}
+    namespace: dev-${BASE_PROJECT}
+  subjects:
+    - kind: Group
+      apiGroup: rbac.authorization.k8s.io
+      name: msal-desarrollo
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: admin

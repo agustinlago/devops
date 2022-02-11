@@ -1,0 +1,175 @@
+apiVersion: template.openshift.io/v1
+kind: Template 
+metadata:
+  name: base-project-template
+  namespace: openshift
+  annotations:
+    description: Template para crear el proyecto base
+parameters:
+  - name: BASE_PROJECT
+    required: true
+objects:
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    name: ${BASE_PROJECT}
+    namespace: openshift-gitops
+    # Finalizer that ensures that project is not deleted until it is not referenced by any application
+    finalizers:
+      - resources-finalizer.argocd.argoproj.io
+  spec:
+    # Allow manifests to deploy from any Git repos
+    sourceRepos:
+    - '*'
+
+    # Only permit applications to deploy to the guestbook namespace in the same cluster
+    destinations:
+      - namespace: openshift-gitops
+        server: https://kubernetes.default.svc
+      - namespace: prod-${BASE_PROJECT}
+        server: https://kubernetes.default.svc
+    
+    # Deny all cluster-scoped resources from being created, except for Namespace
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: 'argoproj.io'
+      kind: Application
+    - group: 'argoproj.io'
+      kind: AppProject
+    - group: 'argoproj.io'
+      kind: ApplicationSet
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+
+    # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
+    namespaceResourceBlacklist:
+    - group: ''
+      kind: ResourceQuota
+    - group: ''
+      kind: LimitRange
+    - group: ''
+      kind: NetworkPolicy
+    
+    
+    # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
+    # namespaceResourceWhitelist:
+    # - group: 'apps'
+    #   kind: Deployment
+    # - group: 'apps'
+    #   kind: DeploymentConfig
+    # - group: 'apps'
+    #   kind: StatefulSet
+    roles:
+    # A role which provides read-only access to all applications in the project
+    # - name: read-only
+    #   description: Read-only privileges to my-project
+    #   policies:
+    #   - p, proj:my-project:read-only, applications, get, my-project/*, allow
+    #   groups:
+    #   - my-oidc-group
+    
+- apiVersion: argoproj.io/v1alpha1
+  kind: ApplicationSet
+  metadata:
+    name: ${BASE_PROJECT}-set
+    namespace: openshift-gitops
+  spec:
+    generators:
+    - list:
+        # Parameters are generated based on this cluster list, to be
+        # substituted into the template below.
+        elements: 
+        - project: ${BASE_PROJECT}
+          env: prod
+
+    # 'template' is an Argo CD Application template, with support 
+    # for parameter substitution using parameters generated above.
+    template: 
+      metadata:
+        name: '{{env}}-{{project}}'
+        namespace: openshift-gitops
+        finalizers:
+          - resources-finalizer.argocd.argoproj.io
+      spec:
+        destination:
+          namespace: '{{env}}-{{project}}'
+          server: 'https://kubernetes.default.svc'
+        source:
+          path: 'ocp-prod/proyectos/{{project}}/{{env}}'
+          repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
+          targetRevision: master
+          directory:
+            recurse: true
+        project: '{{project}}'
+        syncPolicy:
+          automated:
+            selfHeal: true
+          syncOptions:
+            - Validate=false
+            - CreateNamespace=true
+            - ApplyOutOfSyncOnly=true
+
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    name: prod-${BASE_PROJECT}
+    namespace: openshift-gitops
+    # Finalizer that ensures that project is not deleted until it is not referenced by any application
+    finalizers:
+      - resources-finalizer.argocd.argoproj.io
+  spec:
+    # Allow manifests to deploy from any Git repos
+    sourceRepos:
+    - '*'
+
+    # Only permit applications to deploy to the guestbook namespace in the same cluster
+    destinations:
+      - namespace: prod-${BASE_PROJECT}
+        server: https://kubernetes.default.svc
+    
+    # Deny all cluster-scoped resources from being created, except for Namespace
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+
+    # Allow all namespaced-scoped resources to be created, except for ResourceQuota, LimitRange, NetworkPolicy
+    namespaceResourceBlacklist:
+    - group: ''
+      kind: ResourceQuota
+    - group: ''
+      kind: LimitRange
+    - group: ''
+      kind: NetworkPolicy
+    
+    
+    # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
+    # namespaceResourceWhitelist:
+    # - group: 'apps'
+    #   kind: Deployment
+    # - group: 'apps'
+    #   kind: DeploymentConfig
+    # - group: 'apps'
+    #   kind: StatefulSet
+    roles:
+    # A role which provides read-only access to all applications in the project
+    # - name: read-only
+    #   description: Read-only privileges to my-project
+    #   policies:
+    #   - p, proj:my-project:read-only, applications, get, my-project/*, allow
+    #   groups:
+    #   - my-oidc-group

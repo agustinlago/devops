@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repository-gitops
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: GitOps
+  url: ssh://git@10.10.103.100/devops/gitops.git
+  type: git
+  insecure: 'true'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repository-cicd
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: CICD
+  url: ssh://git@10.10.103.100/devops/cicd.git
+  type: git
+  insecure: 'true'

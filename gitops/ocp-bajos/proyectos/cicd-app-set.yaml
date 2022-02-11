@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cicd-set
+  namespace: openshift-gitops
+spec:
+  generators:
+  - list:
+      # Parameters are generated based on this cluster list, to be
+      # substituted into the template below.
+      elements: 
+      - recurso: clustertask
+      - recurso: pipelines
+      - recurso: triggers
+      
+
+  # 'template' is an Argo CD Application template, with support 
+  # for parameter substitution using parameters generated above.
+  template: 
+    metadata:
+      name: '{{recurso}}'
+      namespace: openshift-gitops
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      destination:
+        namespace: openshift-gitops
+        server: 'https://kubernetes.default.svc'
+      source:
+        path: 'ocp-bajos/{{recurso}}'
+        repoURL: 'ssh://git@10.10.103.100/devops/cicd.git'
+        targetRevision: master
+      project: openshift-gitops
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true

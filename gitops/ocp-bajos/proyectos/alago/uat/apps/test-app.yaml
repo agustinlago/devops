@@ -16,8 +16,8 @@ items:
       kind: Route
     project: uat-alago
     source:
-      path: manifests/alago/test/overlays/uat
-      repoURL: https://github.com/agustinlago/devops.git
+      path: overlays/uat
+      repoURL: https://github.com/agustinlago/manifests-test.git
       targetRevision: main
     syncPolicy:
       automated:

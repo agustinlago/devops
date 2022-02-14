@@ -12,6 +12,8 @@ parameters:
     required: true
   - name: NAMESPACE
     value: openshift-gitops
+  - name: GIT_KUSTOMIZE
+    required: true
 objects:
 - apiVersion: argoproj.io/v1alpha1
   kind: Application
@@ -30,7 +32,7 @@ objects:
     project: dev-${BASE_PROJECT}
     source:
       path: overlays/dev
-      repoURL: 'ssh://git@10.10.103.100/DevOps/manifests/${BASE_PROJECT}/${APP_NAME}.git'
+      repoURL: '${GIT_KUSTOMIZE}'
       targetRevision: main
     syncPolicy:
       automated:

@@ -139,7 +139,7 @@ curl -ks $ARGOCD_SERVER/api/v1/session -d $'{"username":"admin","password":"6ZRg
 2. Ejecutar el sync con ese token
 
 ```bash
-export ARGOCD_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAyNzYzNjUsImp0aSI6IjI1YWQyMGZmLTNkZGMtNGU4YS1hOTc3LTdhNzlhZjQwYzFhNyIsImlhdCI6MTY0MDE4OTk2NSwiaXNzIjoiYXJnb2NkIiwibmJmIjoxNjQwMTg5OTY1LCJzdWIiOiJhZG1pbjpsb2dpbiJ9.tLCpdyRD3LUQ-v8kG4skM0g0c1sECRhwAzUX-3cjG8U
+export ARGOCD_TOKEN=
 
 curl -ks -XPOST $ARGOCD_SERVER/api/v1/applications/dev-snvs-api68/sync -H "Authorization: Bearer $ARGOCD_TOKEN" 
 ```

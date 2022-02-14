@@ -86,7 +86,8 @@ oc process ${TECH}-ci-pipeline-template -n openshift -o yaml \
 
 oc process dev-app-template -n openshift -o yaml \
     --param APP_NAME=$APP_NAME \
-    --param BASE_PROJECT=$BASE_PROJECT > $BASE_PROJECT/dev/apps/${APP_NAME}-app.yaml
+    --param BASE_PROJECT=$BASE_PROJECT \
+    --param GIT_KUSTOMIZE=${GIT_KUSTOMIZE} > $BASE_PROJECT/dev/apps/${APP_NAME}-app.yaml
 
 
 
@@ -98,7 +99,8 @@ oc process ${TECH}-cd-pipeline-template -n openshift -o yaml \
 
 oc process qa-app-template -n openshift -o yaml \
     --param APP_NAME=$APP_NAME \
-    --param BASE_PROJECT=$BASE_PROJECT > $BASE_PROJECT/qa/apps/${APP_NAME}-app.yaml
+    --param BASE_PROJECT=$BASE_PROJECT \
+    --param GIT_KUSTOMIZE=${GIT_KUSTOMIZE} > $BASE_PROJECT/qa/apps/${APP_NAME}-app.yaml
 
 
 
@@ -109,7 +111,8 @@ oc process manifest-cd-pipeline-template -n openshift -o yaml \
 
 oc process uat-app-template -n openshift -o yaml \
     --param APP_NAME=$APP_NAME \
-    --param BASE_PROJECT=$BASE_PROJECT > $BASE_PROJECT/uat/apps/${APP_NAME}-app.yaml
+    --param BASE_PROJECT=$BASE_PROJECT \
+    --param GIT_KUSTOMIZE=${GIT_KUSTOMIZE} > $BASE_PROJECT/uat/apps/${APP_NAME}-app.yaml
 
 echo "Se va a desloguear de OCP"
 oc logout &> /dev/null

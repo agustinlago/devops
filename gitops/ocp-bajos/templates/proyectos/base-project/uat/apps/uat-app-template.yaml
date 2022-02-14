@@ -24,7 +24,7 @@ objects:
     destination:
       namespace: uat-${BASE_PROJECT}
       server: 'https://kubernetes.default.svc'
-    ignoreDifferences: {}
+    ignoreDifferences: 
     project: uat-${BASE_PROJECT}
     source:
       path: overlays/uat

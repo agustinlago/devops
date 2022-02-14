@@ -16,7 +16,7 @@ items:
       kind: Deployment
     project: dev-alago
     source:
-      path: 'ssh://git@10.10.103.100/DevOps/manifests/${BASE_PROJECT}/${APP_NAME}.git'overlays/dev
+      path: overlays/dev
       repoURL: https://github.com/agustinlago/manifests-test.git
       targetRevision: main
     syncPolicy: {}

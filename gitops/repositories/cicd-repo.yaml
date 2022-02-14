@@ -1,0 +1,15 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      argocd.argoproj.io/secret-type: repository
+    name: repository-cicd
+  stringData:
+    insecure: "true"
+    name: cicd
+    type: git
+    url: https://github.com/agustinlago/cicd.git
+kind: List
+metadata: {}

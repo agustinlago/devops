@@ -77,7 +77,8 @@ echo "Procesando.."
 
 oc process repository-template -n openshift -o yaml \
     --param APP_NAME=$APP_NAME \
-    --param BASE_PROJECT=$BASE_PROJECT  > ../../repositories/$BASE_PROJECT/${APP_NAME}-repo.yaml
+    --param BASE_PROJECT=$BASE_PROJECT \
+    --param REPO=$GIT_KUSTOMIZE > ../../repositories/$BASE_PROJECT/${APP_NAME}-repo.yaml
 
 oc process ${TECH}-ci-pipeline-template -n openshift -o yaml \
     --param APP_NAME=${APP_NAME} \

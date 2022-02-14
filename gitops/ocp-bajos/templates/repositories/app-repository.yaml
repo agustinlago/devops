@@ -10,6 +10,8 @@ parameters:
     required: true
   - name: APP_NAME
     required: true
+  - name: REPO
+    required: true
 objects:
 - apiVersion: v1
   kind: Secret
@@ -20,6 +22,6 @@ objects:
       argocd.argoproj.io/secret-type: repository
   stringData:
     name: ${APP_NAME}
-    url: ssh://git@10.10.103.100/devops/manifests/${BASE_PROJECT}/${APP_NAME}.git
+    url: ${REPO}
     type: git
     insecure: 'true'

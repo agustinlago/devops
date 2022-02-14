@@ -24,7 +24,6 @@ items:
       kind: Pipeline
     - group: '*'
       kind: ServiceAccount
-    
     destinations:
     - namespace: openshift-gitops
       server: https://kubernetes.default.svc
@@ -41,6 +40,7 @@ items:
       kind: LimitRange
     - group: ""
       kind: NetworkPolicy
+    roles: null
     sourceRepos:
     - '*'
 - apiVersion: argoproj.io/v1alpha1
@@ -71,8 +71,8 @@ items:
         source:
           directory:
             recurse: true
-          path: gitops/ocp-bajos/proyectos/{{project}}/{{env}}
-          repoURL: https://github.com/agustinlago/devops.git
+          path: ocp-bajos/proyectos/{{project}}/{{env}}
+          repoURL: ssh://git@10.10.103.100/devops/gitops.git
           targetRevision: main
         syncPolicy:
           automated:
@@ -81,98 +81,5 @@ items:
           - Validate=false
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true
-- apiVersion: argoproj.io/v1alpha1
-  kind: AppProject
-  metadata:
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    name: dev-alago
-  spec:
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: Namespace
-    - group: '*'
-      kind: Secret
-    - group: '*'
-      kind: PersistentVolumeClaim
-    - group: '*'
-      kind: Pipeline
-    - group: '*'
-      kind: ServiceAccount
-    
-    destinations:
-    - namespace: dev-alago
-      server: https://kubernetes.default.svc
-    namespaceResourceBlacklist:
-    - group: ""
-      kind: ResourceQuota
-    - group: ""
-      kind: LimitRange
-    - group: ""
-      kind: NetworkPolicy
-    sourceRepos:
-    - '*'
-- apiVersion: argoproj.io/v1alpha1
-  kind: AppProject
-  metadata:
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    name: qa-alago
-  spec:
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: Namespace
-    - group: '*'
-      kind: Secret
-    - group: '*'
-      kind: PersistentVolumeClaim
-    - group: '*'
-      kind: Pipeline
-    - group: '*'
-      kind: ServiceAccount
-    
-    destinations:
-    - namespace: qa-alago
-      server: https://kubernetes.default.svc
-    namespaceResourceBlacklist:
-    - group: ""
-      kind: ResourceQuota
-    - group: ""
-      kind: LimitRange
-    - group: ""
-      kind: NetworkPolicy
-    sourceRepos:
-    - '*'
-- apiVersion: argoproj.io/v1alpha1
-  kind: AppProject
-  metadata:
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    name: uat-alago
-  spec:
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: Namespace
-    - group: '*'
-      kind: Secret
-    - group: '*'
-      kind: PersistentVolumeClaim
-    - group: '*'
-      kind: Pipeline
-    - group: '*'
-      kind: ServiceAccount
-    
-    destinations:
-    - namespace: uat-alago
-      server: https://kubernetes.default.svc
-    namespaceResourceBlacklist:
-    - group: ""
-      kind: ResourceQuota
-    - group: ""
-      kind: LimitRange
-    - group: ""
-      kind: NetworkPolicy
-    sourceRepos:
-    - '*'
 kind: List
 metadata: {}

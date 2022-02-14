@@ -19,6 +19,11 @@ items:
       path: overlays/dev
       repoURL: https://github.com/agustinlago/manifests-test.git
       targetRevision: main
-    syncPolicy: {}
+    syncPolicy:
+      automated:
+        selfHeal: true
+      syncOptions:
+      - Validate=false
+      - ApplyOutOfSyncOnly=true
 kind: List
 metadata: {}

@@ -1,4 +1,40 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: dev-alago
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: dev-alago
+- apiVersion: argoproj.io/v1alpha1
+  kind: AppProject
+  metadata:
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    name: dev-alago
+    namespace: openshift-gitops
+  spec:
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: '*'
+      kind: Secret
+    - group: '*'
+      kind: PersistentVolumeClaim
+    - group: '*'
+      kind: Pipeline
+    - group: '*'
+      kind: ServiceAccount
+    destinations:
+    - namespace: dev-alago
+      server: https://kubernetes.default.svc
+    namespaceResourceBlacklist:
+    - group: ""
+      kind: ResourceQuota
+    - group: ""
+      kind: LimitRange
+    - group: ""
+      kind: NetworkPolicy
+    roles: null
+    sourceRepos:
+    - '*'
+kind: List
+metadata: {}

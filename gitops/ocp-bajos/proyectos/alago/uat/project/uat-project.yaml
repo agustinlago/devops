@@ -8,7 +8,7 @@ items:
   kind: PersistentVolumeClaim
   metadata:
     name: workspace-pvc
-    namespace: dev-alago
+    namespace: uat-alago
   spec:
     accessModes:
     - ReadWriteOnce

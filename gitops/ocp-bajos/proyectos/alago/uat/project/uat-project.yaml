@@ -4,6 +4,17 @@ items:
   kind: Namespace
   metadata:
     name: uat-alago
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: workspace-pvc
+    namespace: dev-alago
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
 - apiVersion: argoproj.io/v1alpha1
   kind: AppProject
   metadata:

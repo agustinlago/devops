@@ -9,7 +9,7 @@ items:
     destination:
       namespace: uat-alago
       server: https://kubernetes.default.svc
-    ignoreDifferences: {}
+    ignoreDifferences: 
     project: uat-alago
     source:
       path: overlays/uat

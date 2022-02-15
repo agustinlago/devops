@@ -17,8 +17,8 @@ items:
     project: dev-alago
     source:
       path: overlays/dev
-      plugin:
-        name: argocd-vault-plugin-kustomize
+      #plugin:
+        #name: argocd-vault-plugin-kustomize
       repoURL: https://github.com/agustinlago/manifests-test.git
       targetRevision: main
     syncPolicy:

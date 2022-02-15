@@ -14,7 +14,7 @@ items:
       description: The kustomize git repository url
       name: KUSTOMIZE_GIT_URL
       type: string
-    - default: master
+    - default: main
       description: The kustomize git repository revision
       name: KUSTOMIZE_GIT_REVISION
       type: string

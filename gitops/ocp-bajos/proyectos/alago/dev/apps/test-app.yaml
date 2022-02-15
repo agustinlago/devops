@@ -17,6 +17,8 @@ items:
     project: dev-alago
     source:
       path: overlays/dev
+      plugin:
+        name: argocd-vault-plugin
       repoURL: https://github.com/agustinlago/manifests-test.git
       targetRevision: main
     syncPolicy:

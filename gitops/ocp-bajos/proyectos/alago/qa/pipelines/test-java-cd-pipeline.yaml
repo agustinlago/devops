@@ -14,6 +14,10 @@ items:
       description: The application git repository url
       name: SOURCE_GIT_URL
       type: string
+    - default: "1.0"
+      description: The version of the image
+      name: TAG_VERSION
+      type: string
     - default: master
       description: The application git repository revision
       name: SOURCE_GIT_REVISION
@@ -54,7 +58,7 @@ items:
     results:
     - description: The Image Tag
       name: image-tag
-      value: qa-$(tasks.generate-tag.results.image-tag)
+      value: qa-$(params.TAG_VERSION)
     tasks:
     - name: git-clone
       params:
@@ -124,7 +128,7 @@ items:
     - name: tag-image
       params:
       - name: SCRIPT
-        value: oc tag qa-$(params.BASE_PROJECT)/$(params.APP_NAME):latest qa-$(params.BASE_PROJECT)/$(params.APP_NAME):$(tasks.generate-tag.results.image-tag)
+        value: oc tag qa-$(params.BASE_PROJECT)/$(params.APP_NAME):latest qa-$(params.BASE_PROJECT)/$(params.APP_NAME):$(params.TAG_VERSION)
       retries: 2
       runAfter:
       - build-image

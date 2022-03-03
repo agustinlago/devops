@@ -10,7 +10,7 @@
 #    namespace: 'openshift-gitops'
 #    server: 'https://kubernetes.default.svc'
 #  source:
-#    path: 'ocp-bajos/permisos/msal-desarrollo'
+#    path: 'ocp-bajos/permisos/desarrolladores'
 #    repoURL: 'ssh://git@10.10.103.100/devops/gitops.git'
 #    targetRevision: main
 #  project: 'openshift-gitops'
